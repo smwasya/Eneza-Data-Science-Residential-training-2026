@@ -1,4 +1,4 @@
-# Gut Microbiome Project (Project 8)
+## Gut Microbiome Project (Project 8)
 
 This repository contains all work related to **Project 8** of the **ENEZA Data Science Initiative (DSI) Residential Training**. 
 
