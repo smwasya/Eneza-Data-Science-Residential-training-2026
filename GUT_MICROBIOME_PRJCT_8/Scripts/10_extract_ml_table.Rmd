@@ -1,0 +1,296 @@
+---
+title: "ml_preprocessing"
+output: html_document
+date: "2026-07-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+
+#!/usr/bin/env Rscript
+
+############################################################
+# Create phyloseq object and machine learning dataset
+############################################################
+
+library(phyloseq)
+
+#-----------------------------------------------------------
+# Paths
+#-----------------------------------------------------------
+
+results_dir <- "/home/sam/ENEZA/dada2/results_2"
+tables_dir <-  "/home/sam/ENEZA/dada2/results_2"
+
+asv_file  <- file.path(tables_dir, "asv_abundance_table.csv")
+tax_file  <- file.path(tables_dir, "taxonomy_table.csv")
+meta_file <- file.path(tables_dir, "metadata_all.tsv")
+
+#-----------------------------------------------------------
+# Read ASV abundance table
+#-----------------------------------------------------------
+
+asv <- read.csv(
+    asv_file,
+    row.names = 1,
+    check.names = FALSE
+)
+
+#-----------------------------------------------------------
+# Read taxonomy
+#-----------------------------------------------------------
+
+tax <- read.csv(
+    tax_file,
+    row.names = 1,
+    check.names = FALSE
+)
+
+#-----------------------------------------------------------
+# Read metadata
+#-----------------------------------------------------------
+
+meta <- read.delim(
+    meta_file,
+    header = TRUE,
+    row.names = 1,
+    sep = "\t",
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+)
+
+#-----------------------------------------------------------
+# Keep only common samples
+#-----------------------------------------------------------
+
+# common.samples <- intersect(
+#     rownames(asv),
+#     rownames(meta)
+# )
+
+#asv  <- asv[common.samples, ]
+#meta <- meta[common.samples, ]
+
+#-----------------------------------------------------------
+# Ensure same order
+#-----------------------------------------------------------
+
+#meta <- meta[rownames(asv), ]
+
+#stopifnot(all(rownames(asv) == rownames(meta)))
+
+#-----------------------------------------------------------
+# Build phyloseq object
+#-----------------------------------------------------------
+
+OTU <- otu_table(
+    as.matrix(asv),
+    taxa_are_rows = FALSE
+)
+
+TAX <- tax_table(
+    as.matrix(tax)
+)
+
+SAM <- sample_data(meta)
+
+ps <- phyloseq(
+    OTU,
+    TAX,
+    SAM
+)
+
+cat("\nPhyloseq object created\n")
+cat("Samples :", nsamples(ps), "\n")
+cat("Taxa    :", ntaxa(ps), "\n")
+
+#-----------------------------------------------------------
+# Relative abundance
+#-----------------------------------------------------------
+ps <- subset_taxa(ps,
+                  Kingdom == "Bacteria")
+
+ps <- subset_taxa(ps,
+                  Family != "Mitochondria" | is.na(Family))
+
+ps <- subset_taxa(ps,
+                  Order != "Chloroplast" | is.na(Order))
+#---------------------------------------------------------
+#
+#----------------------------------------------------------
+
+
+ps.rel <- transform_sample_counts(
+    ps,
+    function(x) x / sum(x)
+)
+
+
+#--------------------------------------------
+#remove archea
+#--------------------------------------------
+
+#ps <- subset_taxa(ps,
+                 # Kingdom != "Archaea" | is.na(Kingdom))
+#-----------------------------------------------------------
+# Aggregate to Genus
+#-----------------------------------------------------------
+
+ps.genus <- tax_glom(
+    ps.rel,
+    taxrank = "Genus",
+    NArm = TRUE
+)
+
+
+#-----------------------------------------------------------
+# Remove unwanted genera
+#-----------------------------------------------------------
+
+genus <- as.character(tax_table(ps.genus)[, "Genus"])
+
+keep <- !is.na(genus) &
+        genus != "" &
+        genus != "NA" &
+        genus != "uncultured" &
+        genus != "unclassified" &
+        genus != "Unknown" 
+
+#ps <- subset_taxa(ps,
+                #  Kingdom != "Archaea" | is.na(Kingdom))
+
+ps.genus <- prune_taxa(keep, ps.genus)
+
+cat("Remaining genera:", ntaxa(ps.genus), "\n")
+
+
+genus <- as.character(tax_table(ps.genus)[, "Genus"])
+
+keep <- !is.na(genus) &
+        !grepl(
+            "uncultured|unclassified|unknown|metagenome",
+            genus,
+            ignore.case = TRUE
+        )
+
+ps.genus <- prune_taxa(keep, ps.genus)
+
+###########################
+
+#-----------------------------------------------------------
+# Export cleaned taxonomy table
+#-----------------------------------------------------------
+
+tax.clean <- as.data.frame(
+    tax_table(ps)
+)
+
+write.csv(
+    tax.clean,
+    file.path(tables_dir, "taxonomy_table_bacteria.csv"),
+    row.names = TRUE
+)
+
+#-----------------------------------------------------------
+# Export cleaned ASV abundance table
+#-----------------------------------------------------------
+
+otu.clean <- as.data.frame(
+    otu_table(ps)
+)
+
+if (taxa_are_rows(ps)) {
+    otu.clean <- t(otu.clean)
+    otu.clean <- as.data.frame(otu.clean)
+}
+
+write.csv(
+    otu.clean,
+    file.path(tables_dir, "asv_abundance_table_bacteria.csv"),
+    row.names = TRUE
+)
+
+#-----------------------------------------------------------
+# Extract abundance matrix
+#-----------------------------------------------------------
+
+ml <- as.data.frame(
+    otu_table(ps.genus)
+)
+
+if (taxa_are_rows(ps.genus)) {
+    ml <- t(ml)
+    ml <- as.data.frame(ml)
+}
+
+#-----------------------------------------------------------
+# Rename columns with Genus names
+#-----------------------------------------------------------
+tax.mat <- as(tax_table(ps.genus), "matrix")
+
+head(tax.mat)
+
+genus <- tax.mat[, "Genus"]
+
+head(genus)
+
+
+
+
+###################################
+genus <- tax_table(ps.genus)[, "Genus"]
+
+colnames(ml) <- make.unique(as.character(genus))
+
+#-----------------------------------------------------------
+# Add disease labels
+#-----------------------------------------------------------
+
+ml$Disease <- sample_data(ps.genus)$DISEASE
+
+#-----------------------------------------------------------
+# Save
+
+#-----------------------------------------------------------
+
+write.csv(
+    ml,
+    file.path(tables_dir, "machine_learning_dataset.csv"),
+    row.names = TRUE
+)
+
+saveRDS(
+    ps,
+    file.path(tables_dir, "phyloseq.rds")
+)
+
+saveRDS(
+    ps.genus,
+    file.path(tables_dir, "phyloseq_genus.rds")
+)
+
+cat("\nMachine learning dataset saved.\n")
+cat("Dimensions:", dim(ml), "\n")
+
+
+
+
+```
+
+
+```{r}
+ml <- read.csv("/home/sam/ENEZA/dada2/results_2/machine_learning_dataset.csv", check.names = FALSE)
+
+colnames(ml)[1] <- "SampleID"
+
+write.csv(
+    ml,
+    "/home/sam/ENEZA/dada2/results_2/machine_learning_dataset.csv",
+    row.names = FALSE
+)
+```
+
