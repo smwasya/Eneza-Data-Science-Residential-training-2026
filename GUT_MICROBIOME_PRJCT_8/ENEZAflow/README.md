@@ -148,7 +148,7 @@ The SILVA reference databases are **not distributed with this repository** becau
 
 Download the required reference files separately and place them in the `resources/` directory before running the pipeline.
 
-You can download the SILVA DB from this [link](https://zenodo.org/records/4587955)
+You can download the SILVA DB `_train_set.fa.gz` file from this [link](https://zenodo.org/records/4587955) and place it inside resources folder in the project dir.
 
 ---
 
