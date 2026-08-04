@@ -109,7 +109,7 @@ cd Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow
 nextflow run main.nf
 ```
 
-- Make sure to edit the nextflow.config with appropriate file paths
+- Make sure to edit the nextflow.config with appropriate file absolute paths for `input reads`, `metadata` and `silva ref sequences`.
 
 ---
 
