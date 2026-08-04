@@ -2,9 +2,14 @@
 
 
 *This submodule contains all the work related to PROJECT 8 of ENEZA DSI Residential Training.*
+
+
 ---
 
-Directory Structure:
+
+
+
+The Directory Structure:
 
 ```text
 GUT_MICROBIOME_PRJCT_8/
