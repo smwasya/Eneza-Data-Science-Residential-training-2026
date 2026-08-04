@@ -9,7 +9,7 @@ taxa <- assignTaxonomy(
     "/home/sam/ENEZA/dada2/results/silva_nr99_v138.1_train_set.fa.gz",
     multithread = TRUE
 )
-
+## Save the RDS file
 saveRDS(
     taxa,
     "/home/sam/ENEZA/dada2/results_2/taxonomy_merged.rds"
