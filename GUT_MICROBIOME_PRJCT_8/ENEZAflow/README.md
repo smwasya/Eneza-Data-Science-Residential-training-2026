@@ -158,4 +158,4 @@ You can download the SILVA DB `_train_set.fa.gz` file from this [link](https://z
 
 ## Authors
 
-Developed as part of the **ENEZA Data Science Initiative Residential Training 2026**  for reproducible microbiome bioinformatics and downstream machine learning applications.
+Developed as part of the **ENEZA Data Science Initiative Residential Training 2026**  for reproducible microbiome bioinformatics nextflow pipeline and downstream machine learning models for Type 2 Diabetes.
