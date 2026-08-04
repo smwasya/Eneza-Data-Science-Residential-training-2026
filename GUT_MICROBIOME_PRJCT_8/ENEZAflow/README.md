@@ -73,6 +73,7 @@ Phyloseq Object
 ENEZAflow/
 |-- bin/
 |-- modules/
+|--results/
 |-- workflows/
 |-- resources/
 |-- main.nf
