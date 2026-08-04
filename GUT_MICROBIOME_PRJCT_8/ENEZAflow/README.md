@@ -71,9 +71,7 @@ Phyloseq Object
 
 ```text
 ENEZAflow/
-|-- assets/
 |-- bin/
-|-- conf/
 |-- modules/
 |-- workflows/
 |-- resources/
