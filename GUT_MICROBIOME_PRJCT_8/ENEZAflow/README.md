@@ -5,7 +5,7 @@
 
 ## Overview
 
-**ENEZAflow** is a modular Nextflow pipeline developed to process Illumina 16S rRNA amplicon sequencing data from raw FASTQ files to high-quality amplicon sequence variants (ASVs) and downstream microbiome analyses. The pipeline emphasizes reproducibility, and scalability. The current pipeline has not been configured for use with containers but rather needs pre-installed `R`, `DADA2`, and `phyloseq` library.
+**ENEZAflow** is a modular Nextflow pipeline developed to process Illumina 16S rRNA amplicon sequencing data from raw FASTQ files to high-quality amplicon sequence variants (ASVs) and downstream microbiome analyses. The pipeline emphasizes reproducibility, and scalability. The current pipeline has not been configured for use with containers but rather needs pre-installed `fastp`, `R`, `DADA2`, and `phyloseq` library.
 
 The current implementation is optimized for paired-end Illumina sequencing data and uses the DADA2 algorithm for denoising and ASV inference.
 
