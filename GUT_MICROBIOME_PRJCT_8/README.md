@@ -1,6 +1,8 @@
 # Gut Microbiome Project (Project 8)
 
-This repository contains all work related to **Project 8** of the **ENEZA Data Science Initiative (DSI) Residential Training**. The project focuses on reproducible 16S rRNA gut microbiome analysis and the development of machine learning models for disease classification using microbial community profiles.
+This repository contains all work related to **Project 8** of the **ENEZA Data Science Initiative (DSI) Residential Training**. 
+
+The project focuses on reproducible 16S rRNA gut microbiome analysis and the development of machine learning models for disease classification using microbial community profiles.
 
 ## Repository Structure
 
@@ -25,7 +27,9 @@ Contains processed datasets used throughout the project, including:
 
 ### ENEZAflow
 
-Contains **ENEZAflow**, a reproducible Nextflow pipeline for 16S rRNA microbiome analysis. The pipeline processes raw sequencing reads through quality control, denoising, taxonomic assignment, and generation of analysis-ready outputs.
+Contains **ENEZAflow**, a reproducible Nextflow pipeline for 16S rRNA microbiome analysis. 
+
+The pipeline processes raw sequencing reads through quality control, denoising, taxonomic assignment, and generation of analysis-ready outputs.
 
 Detailed documentation is available in `ENEZAflow/README.md`.
 
