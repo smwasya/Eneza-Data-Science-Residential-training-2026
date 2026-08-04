@@ -15,17 +15,17 @@ GUT_MICROBIOME_PRJCT_8/
 └── Scripts/
 ```
 
-## Directory Description
+## Directory Structure
 
-### Data
+### `Data/`
 
 Contains processed datasets used throughout the project, including:
 
 * Diversity analysis tables
-* Feature tables for downstream analyses
+* ASVs tables for downstream analyses
 * Input datasets for machine learning models
 
-### ENEZAflow
+### `ENEZAflow/`
 
 Contains **ENEZAflow**, a reproducible Nextflow pipeline for 16S rRNA microbiome analysis. 
 
@@ -33,7 +33,7 @@ The pipeline processes raw sequencing reads through quality control, denoising, 
 
 Detailed documentation is available in `ENEZAflow/README.md`.
 
-### Machine-Learning
+### `Machine-Learning`
 
 ```text
 Machine-Learning/
@@ -52,26 +52,26 @@ This directory contains all resources related to machine learning model developm
 * Performance evaluation results
 * Figures
 
-#### notebooks/
+#### `notebooks/`
 
 Contains seven well-documented Jupyter notebooks covering the complete machine learning workflow, from exploratory data analysis and preprocessing to model training, evaluation, and interpretation.
 
-#### model/
+#### `model/`
 
 Contains the trained and optimized machine learning models.
 
-#### figures/
+#### `figures/`
 
 Contains figures generated during exploratory analysis, model evaluation, and interpretation.
 
-#### results/
+#### `results/`
 
 Contains model evaluation metrics, summaries, and exported outputs.
 
-### Results
+### `Results/`
 
 Contains outputs generated from microbiome analyses, including diversity analyses, taxonomic summaries, and other downstream results.
 
-### Scripts
+### `Scripts/`
 
 Contains utility scripts used throughout the project for data preprocessing, analysis, visualization, and workflow automation.
