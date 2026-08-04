@@ -1,0 +1,3 @@
+SampleID	Disease	forward	reverse
+SRR11127806	Type 2 Diabetes	/home/sam/gut2d_eneza/tests/SRR11127806_1.fastq.gz	/home/sam/gut2d_eneza/tests/SRR11127806_2.fastq.gz
+SRR11127882	Type 2 Diabetes	/home/sam/gut2d_eneza/tests/SRR11127882_1.fastq.gz	/home/sam/gut2d_eneza/tests/SRR11127882_2.fastq.gz

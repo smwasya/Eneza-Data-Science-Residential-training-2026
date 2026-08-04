@@ -1,0 +1,11 @@
+# Nextflow
+work/
+.nextflow/
+.nextflow*
+.nextflow.log*
+.trace
+.timeline.*
+.report.*
+.dag.*
+# Reference databases
+resources/*.fa.gz
