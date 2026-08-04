@@ -1,35 +1,35 @@
-### The GUT MICROBIOME PROJECT
+# Gut Microbiome Project (Project 8)
 
+This repository contains all work related to **Project 8** of the **ENEZA Data Science Initiative (DSI) Residential Training**. The project focuses on reproducible 16S rRNA gut microbiome analysis and the development of machine learning models for disease classification using microbial community profiles.
 
-*This submodule contains all the work related to PROJECT 8 of ENEZA DSI Residential Training.*
-
-
----
-
-
-
-
-The Directory Structure:
+## Repository Structure
 
 ```text
 GUT_MICROBIOME_PRJCT_8/
-├── Data
-├── ENEZAflow
-├── Machine-Learning
-├── Results
-└── Scripts
-
+├── Data/
+├── ENEZAflow/
+├── Machine-Learning/
+├── Results/
+└── Scripts/
 ```
 
-##### *`Data:`*
+## Directory Description
 
-This folder contains all the tables processed data that was used for the diversity analysis as well as the tables used as input in the ML classifier
+### Data
 
-##### *`ENEZAflow:`*
+Contains processed datasets used throughout the project, including:
 
-This is the module for a reproducible 16S rRNA microbiome analysis nextflow pipeline whose doculementation is attached in the [README.md](https://github.com/smwasya/Eneza-Data-Science-Residential-training-2026/tree/main/GUT_MICROBIOME_PRJCT_8/ENEZAflow)
+* Diversity analysis tables
+* Feature tables for downstream analyses
+* Input datasets for machine learning models
 
-##### *`Machine-Learning:`*
+### ENEZAflow
+
+Contains **ENEZAflow**, a reproducible Nextflow pipeline for 16S rRNA microbiome analysis. The pipeline processes raw sequencing reads through quality control, denoising, taxonomic assignment, and generation of analysis-ready outputs.
+
+Detailed documentation is available in `ENEZAflow/README.md`.
+
+### Machine-Learning
 
 ```text
 Machine-Learning/
@@ -40,16 +40,34 @@ Machine-Learning/
 └── results/
 ```
 
+This directory contains all resources related to machine learning model development, including:
 
-This folder hosts the key data, scripts, results and other crucial resources genereted and utilized during the machine learning model development. Together with the developed optimzied ML classifier under the `model` subdir. The `figures` dir host the corresponding plots
+* Processed datasets
+* Model training scripts
+* Trained models
+* Performance evaluation results
+* Figures
 
+#### notebooks/
 
-###### *`notebooks:`*
-The well labelled 7 jupyter notebooks with codes for the model training.
+Contains seven well-documented Jupyter notebooks covering the complete machine learning workflow, from exploratory data analysis and preprocessing to model training, evaluation, and interpretation.
 
+#### model/
 
-###### *`results:`*
+Contains the trained and optimized machine learning models.
 
-This folder has got the summaries from the model.
+#### figures/
 
+Contains figures generated during exploratory analysis, model evaluation, and interpretation.
 
+#### results/
+
+Contains model evaluation metrics, summaries, and exported outputs.
+
+### Results
+
+Contains outputs generated from microbiome analyses, including diversity analyses, taxonomic summaries, and other downstream results.
+
+### Scripts
+
+Contains utility scripts used throughout the project for data preprocessing, analysis, visualization, and workflow automation.
