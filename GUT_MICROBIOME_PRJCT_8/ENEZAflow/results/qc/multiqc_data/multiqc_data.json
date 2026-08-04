@@ -3,10 +3,10 @@
     "report_data_sources": {
         "FastQC": {
             "all_sections": {
-                "SRR11127806_1": "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127806_1_fastqc.zip",
-                "SRR11127806_2": "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127806_2_fastqc.zip",
-                "SRR11127882_1": "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127882_1_fastqc.zip",
-                "SRR11127882_2": "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127882_2_fastqc.zip"
+                "SRR11127806_1": "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127806_1_fastqc.zip",
+                "SRR11127806_2": "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127806_2_fastqc.zip",
+                "SRR11127882_1": "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127882_1_fastqc.zip",
+                "SRR11127882_2": "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127882_2_fastqc.zip"
             }
         }
     },
@@ -128,7 +128,7 @@
             }
         }
     },
-    "report_creation_date": "2026-08-04, 08:35 EAT",
+    "report_creation_date": "2026-08-04, 14:09 EAT",
     "report_plot_data": {
         "fastqc_sequence_counts_plot": {
             "id": "fastqc_sequence_counts_plot",
@@ -10705,11 +10705,11 @@
     "config_subtitle": null,
     "config_title": null,
     "config_version": "1.35",
-    "config_output_dir": "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be",
+    "config_output_dir": "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62",
     "config_sample_names_rename": [],
     "config_sample_names_rename_buttons": [],
     "config_analysis_dir_abs": [
-        "/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be"
+        "/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62"
     ],
     "report_saved_raw_data": {
         "multiqc_fastqc": {

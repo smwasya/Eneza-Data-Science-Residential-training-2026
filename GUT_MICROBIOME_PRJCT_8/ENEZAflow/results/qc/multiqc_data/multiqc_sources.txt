@@ -1,5 +1,5 @@
 Module	Section	Sample Name	Source
-FastQC	all_sections	SRR11127806_1	/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127806_1_fastqc.zip
-FastQC	all_sections	SRR11127806_2	/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127806_2_fastqc.zip
-FastQC	all_sections	SRR11127882_1	/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127882_1_fastqc.zip
-FastQC	all_sections	SRR11127882_2	/home/sam/gut2d_eneza/work/f7/a4c2366ec1488241df92db314ec8be/SRR11127882_2_fastqc.zip
+FastQC	all_sections	SRR11127806_1	/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127806_1_fastqc.zip
+FastQC	all_sections	SRR11127806_2	/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127806_2_fastqc.zip
+FastQC	all_sections	SRR11127882_1	/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127882_1_fastqc.zip
+FastQC	all_sections	SRR11127882_2	/home/sam/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/ENEZAflow/work/ae/3a3cca33f863aeb1f8921be09c7b62/SRR11127882_2_fastqc.zip

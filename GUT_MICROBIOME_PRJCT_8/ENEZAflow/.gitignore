@@ -9,3 +9,6 @@ work/
 .dag.*
 # Reference databases
 resources/*.fa.gz
+!resources/.gitkeep
+results/*
+!results/.gitkeep
