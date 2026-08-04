@@ -1,5 +1,8 @@
+### The GUT MICROBIOME PROJECT
 
-This submodule contains all the work related to PROJECT 8 of ENEZA DSI Residential Training. 
+
+*This submodule contains all the work related to PROJECT 8 of ENEZA DSI Residential Training.*
+---
 
 Directory Structure:
 
@@ -36,11 +39,11 @@ Machine-Learning/
 This folder hosts the key data, scripts, results and other crucial resources genereted and utilized during the machine learning model development. Together with the developed optimzied ML classifier under the `model` subdir. The `figures` dir host the corresponding plots
 
 
-##### *`notebooks:`*
+###### *`notebooks:`*
 The well labelled 7 jupyter notebooks with codes for the model training.
 
 
-##### *`results:`*
+###### *`results:`*
 
 This folder has got the summaries from the model.
 
