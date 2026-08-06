@@ -75,3 +75,12 @@ Contains outputs generated from microbiome analyses, including diversity analyse
 ### `Scripts/`
 
 Contains utility scripts used throughout the project for data preprocessing, analysis, visualization, and workflow automation.
+
+### Authors
+Developed as part of the ENEZA Data Science Initiative Residential Training 2026 for reproducible microbiome bioinformatics nextflow pipeline and downstream machine learning models for Type 2 Diabetes.
+
+##Contributors
+- Samuel Mwasya
+- Tiffany Moreka
+- Geoffrey Katana
+- Samson Otiso
