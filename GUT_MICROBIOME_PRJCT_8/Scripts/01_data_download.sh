@@ -1,3 +1,4 @@
+#Download data from SRA
 while read SRR
 do
     echo "Downloading $SRR"
