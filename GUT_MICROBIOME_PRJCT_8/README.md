@@ -80,7 +80,7 @@ Contains utility scripts used throughout the project for data preprocessing, ana
 Developed as part of the ENEZA Data Science Initiative Residential Training 2026 for reproducible microbiome bioinformatics nextflow pipeline and downstream machine learning models for Type 2 Diabetes.
 
 ### Contributors
-- Samuel Mwasya
 - Tiffany Moreka
 - Geoffrey Katana
 - Samson Otiso
+- Samuel Mwasya
