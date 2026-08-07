@@ -71,14 +71,19 @@ Phyloseq Object
 
 ```text
 ENEZAflow/
-|-- bin/
-|-- modules/
-|--results/
-|-- workflows/
-|-- resources/
-|-- main.nf
-|-- nextflow.config
-|-- README.md
+.
+├── bin
+├── main.nf
+├── modules
+├── nextflow.config
+├── README.md
+├── resources
+├── results
+├── scripts
+├── tests
+├── work
+└── workflows
+
 ```
 
 ---
