@@ -1,0 +1,545 @@
+---
+title: "16sRNA_Analysis_pipeline"
+output: html_document
+date: "2026-08-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(phyloseq)
+library(ggplot2)
+```
+
+```{r}
+tax <- read.csv(
+    "dada2/results_2/taxonomy_table_bacteria.csv",
+    row.names = 1,
+    check.names = FALSE
+)
+
+head(tax)
+
+tax <- tax_table(as.matrix(tax))
+head(tax)
+```
+
+```{r}
+otu <- read.csv(
+    "dada2/results_2/asv_abundance_table_bacteria.csv",
+    row.names = 1,
+    check.names = FALSE
+)
+
+otu <- otu_table(as.matrix(t(otu)), taxa_are_rows = TRUE)
+```
+
+
+```{r}
+all(taxa_names(otu) == taxa_names(tax))
+```
+
+```{r}
+physeq_b <-phyloseq(otu, tax)
+```
+
+```{r}
+meta<- read.table("dada2/results_2/metadata_all.tsv",sep = "\t", header = TRUE, row.names = 1)
+
+names(meta)
+head(meta)
+
+meta<-sample_data(meta)
+
+```
+
+```{r}
+library(ape)
+
+random_tree <- rtree(ntaxa(physeq_b),rooted = TRUE, tip.label = taxa_names(physeq_b))
+plot(random_tree)
+```
+
+
+```{r}
+physeq1 <- merge_phyloseq(physeq_b, meta, random_tree)
+physeq1
+saveRDS(physeq1, file="physeq_gut_august_bacteria.rds")
+
+```
+
+```{r}
+#Load Packages
+suppressPackageStartupMessages({
+require(csv)
+require(dplyr)
+require(tidyr)
+library(dada2)
+library(Cairo)
+library(ggtree)
+library(VennDiagram)
+library(UpSetR)
+library("phyloseq"); packageVersion("phyloseq")
+library("vegan");packageVersion("vegan") 
+library("ggplot2");packageVersion("ggplot2")
+library("dendextend");packageVersion("dendextend")
+library("tidyr");packageVersion("tidyr")
+library("viridis");packageVersion("viridis")
+library("reshape");packageVersion("reshape")
+#install.packages("remotes")
+#remotes::install_github("vmikk/metagMisc")
+library(metagMisc)
+library(janitor)
+library(coin) 
+library(reshape2) 
+library(ggnewscale) 
+library(MicrobiotaProcess)
+library(patchwork)
+})
+```
+
+
+```{r}
+ps1 <- readRDS(file ="~/ENEZA/physeq_gut_august_bacteria.rds" )
+```
+
+```{r}
+
+#filtering the unwanted sequences
+ps2 <- subset_taxa(ps1, (Order!="Chloroplast") | is.na(Order))
+ntaxa(ps2)
+ps2 <- subset_taxa(ps2, (Genus!="Chloroflexi") | is.na(Genus))
+ntaxa(ps2)
+ps2<- subset_taxa(ps2, (Family!="Mitochondria") | is.na(Family))
+ntaxa(ps2)
+ps2<- subset_taxa(ps2, (Kingdom!="Archaea") | is.na(Kingdom))
+ntaxa(ps2)
+ps2<- subset_taxa(ps2, (Kingdom!="Eukaryota") | is.na(Kingdom))
+ntaxa(ps2)
+
+```
+
+```{r}
+
+#ps3 <- prune_taxa(taxa_sums(ps2) > 20, ps2)
+ps3 <- ps2
+
+```
+
+
+
+
+```{r}
+
+
+#Extracting the filtered taxonomy and feature tables for barplot plotting
+tax_table <- phyloseq_to_df(ps3, addtax = T, addtot = F, addmaxrank = F)
+
+cumulation <- tax_table %>% adorn_totals(c("col"))
+cumulation <- cumulation[order(cumulation$Total, decreasing = TRUE),]
+
+
+```
+
+```{r}
+#merging the blast taxonomic classification to blast abundance table
+merged_data <- tax_table
+write.csv(merged_data, file="diversity/Taxonomic_Classification.csv")
+```
+
+```{r}
+library(phyloseq)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(phyloseq)
+
+ps3.genus <- tax_glom(ps3, taxrank = "Genus", NArm = FALSE)
+```
+
+```{r}
+ps3.rel <- transform_sample_counts(
+    ps3.genus,
+    function(x) x / sum(x)
+)
+```
+
+```{r}
+library(dplyr)
+
+rel_df <- psmelt(ps3.rel)
+```
+
+```{r}
+rel_df <- rel_df %>%
+  filter(
+    !is.na(Genus),
+    Genus != ""
+  )
+```
+
+```{r}
+rel_df <- rel_df %>%
+  filter(Genus != "Unknown")
+```
+
+```{r}
+genus_summary <- rel_df %>%
+  group_by(DISEASE, Genus) %>%
+  summarise(
+    MeanAbundance = mean(Abundance),
+    .groups = "drop"
+  )
+```
+
+```{r}
+library(tidyr)
+
+summary_table <- genus_summary %>%
+  pivot_wider(
+    names_from = DISEASE,
+    values_from = MeanAbundance,
+    values_fill = 0
+  )
+```
+
+```{r}
+summary_table <- summary_table %>%
+  rename(T2D = `Type 2 diabetes`)
+```
+
+```{r}
+summary_table <- summary_table %>%
+  mutate(
+    Healthy = Healthy * 100,
+    T2D = T2D * 100
+  )
+```
+
+```{r}
+summary_table <- summary_table %>%
+  mutate(
+    Mean = (Healthy + T2D) / 2
+  )
+
+top300 <- summary_table %>%
+  arrange(desc(Mean)) %>%
+  slice(1:300)
+```
+
+```{r}
+other <- summary_table %>%
+  filter(!Genus %in% top30$Genus) %>%
+  summarise(
+    Genus = "Other",
+    Healthy = sum(Healthy),
+    T2D = sum(T2D)
+  )
+
+plot_table <- bind_rows(top30, other)
+```
+
+```{r}
+plot_df <- plot_table %>%
+  select(-Mean) %>%      # if Mean exists
+  pivot_longer(
+    cols = c(Healthy, T2D),
+    names_to = "Disease",
+    values_to = "RelativeAbundance"
+  )
+```
+
+
+```{r}
+plot_df$Genus <- recode(
+  plot_df$Genus,
+  "Clostridium sensu stricto 1" = "Clostridium s.s. 1",
+  "[Eubacterium] hallii group" = "Eubacterium hallii grp",
+  "[Ruminococcus] torques group" = "Ruminococcus torques grp",
+  "Erysipelotrichaceae UCG-003" = "UCG-003"
+)
+```
+
+```{r}
+library(ggtext)
+
+plot_df$Genus <- ifelse(
+  plot_df$Genus == "Other",
+  "Other",
+  paste0("<i>", plot_df$Genus, "</i>")
+)
+```
+
+```{r}
+library(ggplot2)
+library(ggtext)
+
+ggplot(plot_df,
+       aes(x = Disease,
+           y = RelativeAbundance,
+           fill = Genus)) +
+  geom_col(position = "stack") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  labs(
+    x = "",
+    y = "Relative abundance (%)",
+    fill = "Genus"
+  ) +
+  theme_classic() +
+  theme(
+    legend.text = element_markdown(size = 10),
+    legend.title = element_text(face = "bold")
+  )
+```
+```{r}
+library(ggplot2)
+library(ggtext)
+
+ggplot(
+  plot_df,
+  aes(
+    x = reorder(Genus, RelativeAbundance),
+    y = RelativeAbundance,
+    fill = Disease
+  )
+) +
+  geom_col(
+    position = position_dodge(width = 0.8),
+    width = 0.7,
+    colour = "black",
+    linewidth = 0.2
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      "Healthy" = "#4DBBD5",
+      "T2D" = "#E64B35"
+    )
+  ) +
+  labs(
+    x = "",
+    y = "Relative abundance (%)",
+    fill = "Disease"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(
+    axis.text.y = element_markdown(size = 11),
+    axis.text.x = element_text(size = 11),
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(face = "bold"),
+    legend.title = element_text(face = "bold"),
+    legend.text = element_text(size = 11),
+    legend.position = "top"
+  )
+```
+
+
+
+```{r}
+library(ggplot2)
+
+ordu <- ordinate(ps3, method = "PCoA", distance = "bray")
+
+ord_df <- as.data.frame(ordu$vectors[, 1:2])
+colnames(ord_df) <- c("PCoA1", "PCoA2")
+
+ord_df$SampleID <- rownames(ord_df)
+
+metadata <- data.frame(sample_data(ps3))
+metadata$SampleID <- rownames(metadata)
+
+plot_df <- merge(ord_df, metadata, by = "SampleID")
+```
+
+
+```{r}
+pcoa_plot <-ggplot(plot_df,
+       aes(PCoA1, PCoA2, colour = DISEASE)) +
+    geom_point(size = 3) +
+    stat_ellipse() +
+    theme_classic() +
+    scale_color_manual(values = c(
+        "Healthy" = "#1b9e77",
+        "Type 2 diabetes" = "#d95f02"
+    )) + labs(
+        colour = "Disease Status"
+    )
+
+pcoa_plot
+```
+```{r}
+ggsave("~/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/Results/microbiome_diversity/beta_diversity_pcoa.png", pcoa_plot, dpi = 900, height = 4, width = 5 )
+```
+
+
+```{r}
+library(vegan)
+
+dist.bc <- phyloseq::distance(ps3, method = "bray")
+
+adonis2(
+    dist.bc ~ DISEASE,
+    data = data.frame(sample_data(ps3))
+)
+```
+
+```{r}
+summary(sample_sums(ps3))
+
+hist(sample_sums(ps3))
+```
+
+```{r}
+ps4 <- prune_samples(sample_sums(ps3) >= 20000, ps3)
+
+nsamples(ps4)
+```
+
+
+```{r}
+set.seed(42)
+
+ps_rarefied <- rarefy_even_depth(
+    ps4,
+    sample.size = 20000,
+    rngseed = 42
+)
+```
+
+```{r}
+library(vegan)
+
+dist <- phyloseq::distance(ps3_rel, method = "bray")
+
+meta <- data.frame(sample_data(ps3_rel))
+
+adonis2(
+    dist ~ DISEASE,
+    data = meta
+)
+```
+
+```{r}
+alpha <- estimate_richness(
+    ps_rarefied,
+    measures = c("Observed","Shannon","Simpson","Chao1")
+)
+```
+
+```{r}
+alpha$SampleID <- rownames(alpha)
+
+meta <- data.frame(sample_data(ps4))
+meta$SampleID <- rownames(meta)
+
+alpha <- merge(alpha, meta, by="SampleID")
+```
+
+```{r}
+library(ggpubr)
+
+alph_d <- ggboxplot(
+    alpha,
+    x = "DISEASE",
+    y = "Shannon",
+    color = "DISEASE",
+    palette = c(
+        "Healthy"="#F8766D",
+        "Type 2 diabetes"="#00BFC4"
+    ),
+    add = "jitter"
+) +
+stat_compare_means(method="wilcox.test") +
+theme_classic(base_size=14)
+
+alph_d
+```
+
+```{r}
+library(ggpubr)
+
+alph_d <- ggboxplot(
+    alpha,
+    x = "DISEASE",
+    y = "Shannon",
+    color = "DISEASE",
+    palette = c(
+        "Healthy" = "#F8766D",
+        "Type 2 diabetes" = "#00BFC4"
+    ),
+    add = "jitter"
+) +
+stat_compare_means(method = "wilcox.test") +
+labs(
+    x = "Disease Status",
+    color = "Disease Status"
+) +
+theme_classic(base_size = 14)
+
+alph_d
+```
+
+
+```{r}
+ggsave(
+  "~/Eneza-Data-Science-Residential-training-2026/GUT_MICROBIOME_PRJCT_8/Results/microbiome_diversity/alpha_diversity.png",
+  alph_d,
+  dpi = 900, height = 4, width = 5
+)
+```
+
+
+
+
+```{r}
+ggboxplot(
+    alpha,
+    x="DISEASE",
+    y="Chao1",
+    color="DISEASE",
+    palette=c(
+        "Healthy"="#F8766D",
+        "Type 2 diabetes"="#00BFC4"
+    ),
+    add="jitter"
+) +
+stat_compare_means(method="wilcox.test") +
+theme_classic(base_size=14)
+```
+
+```{r}
+ggboxplot(
+    alpha,
+    x="DISEASE",
+    y="Observed",
+    color="DISEASE",
+    palette=c(
+        "Healthy"="#F8766D",
+        "Type 2 diabetes"="#00BFC4"
+    ),
+    add="jitter"
+) +
+stat_compare_means(method="wilcox.test") +
+theme_classic(base_size=14)
+```
+
+```{r}
+ggboxplot(
+    alpha,
+    x="DISEASE",
+    y="Simpson",
+    color="DISEASE",
+    palette=c(
+        "Healthy"="#F8766D",
+        "Type 2 diabetes"="#00BFC4"
+    ),
+    add="jitter"
+) +
+stat_compare_means(method="wilcox.test") +
+theme_classic(base_size=14)
+```
+
